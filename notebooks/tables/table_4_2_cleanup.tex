@@ -1,0 +1,20 @@
+\begin{table}[h]
+\centering
+\small
+\caption{Эксперимент~1: вклад фильтрации неправдоподобных значений и~дедупликации в~метрики этапа~3. Все варианты применяются к~одинаковому baseline-выводу LLM без~повторных API-вызовов.}
+\label{tab:exp_cleanup}
+\begin{tabular}{@{}lrrrrrrrr@{}}
+\toprule
+Модель, фильтр & n preds & TP & FP & FN & Precision & Recall & $F_1$ & Hall., \% \\
+\midrule
+DeepSeek-V3, raw & 351 & 327 & 24 & 40 & 0.932 & 0.891 & 0.911 & 6.8 \\
+DeepSeek-V3, + plausibility & 351 & 327 & 24 & 40 & 0.932 & 0.891 & 0.911 & 6.8 \\
+DeepSeek-V3, + dedupe & 351 & 327 & 24 & 40 & 0.932 & 0.891 & 0.911 & 6.8 \\
+DeepSeek-V3, + clean (both) & 351 & 327 & 24 & 40 & 0.932 & 0.891 & 0.911 & 6.8 \\
+Gemini 2.5 Flash, raw & 401 & 345 & 56 & 24 & 0.860 & 0.935 & 0.896 & 14.0 \\
+Gemini 2.5 Flash, + plausibility & 401 & 345 & 56 & 24 & 0.860 & 0.935 & 0.896 & 14.0 \\
+Gemini 2.5 Flash, + dedupe & 401 & 345 & 56 & 24 & 0.860 & 0.935 & 0.896 & 14.0 \\
+Gemini 2.5 Flash, + clean (both) & 401 & 345 & 56 & 24 & 0.860 & 0.935 & 0.896 & 14.0 \\
+\bottomrule
+\end{tabular}
+\end{table}

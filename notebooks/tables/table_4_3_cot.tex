@@ -1,0 +1,18 @@
+\begin{table}[h]
+\centering
+\small
+\caption{Эксперимент~2 (v2): Chain-of-Thought с audit-framing и~worked examples для~clean-C. Колонка <<Combined~IDR (clean-C)>>~--- на~30~примерах класса \texttt{wrong\_conclusion\_clean}.}
+\label{tab:exp_cot}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Прогон & Primary Acc & IDR (p) & Combined IDR & Combined IDR (clean-C) \\
+\midrule
+DS, baseline & 0.670 & 0.662 & 0.665 & 0.033 \\
+DS, + CoT v2 & 0.631 & 0.669 & 0.694 & 0.069 \\
+Gem, baseline & 0.629 & 0.662 & 0.675 & 0.033 \\
+Gem, + CoT v2 & 0.609 & 0.662 & 0.703 & 0.034 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

@@ -1,0 +1,16 @@
+\begin{table}[h]
+\centering
+\small
+\caption{Cross-verify v2: счётчики действий verifier'а. Ожидание после промпт-фикса: \texttt{n\_removed} вырастет, \texttt{n\_added} упадёт (модель станет precision-фильтром).}
+\label{tab:exp_xverify_diag}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+Прогон & n\_proposed & n\_verified & n\_corrected & n\_removed & n\_added & n\_final \\
+\midrule
+DS $\to$ Gem v2 & 343 & 329 & 38 & 14 & 31 & 345 \\
+Gem $\to$ DS v2 & 373 & 371 & 3 & 2 & 6 & 371 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

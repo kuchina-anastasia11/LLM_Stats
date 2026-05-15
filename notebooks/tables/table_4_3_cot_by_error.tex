@@ -1,0 +1,34 @@
+\begin{table}[h]
+\centering
+\small
+\caption{Эксперимент~2 (v2): Combined IDR по~классам ошибок.}
+\label{tab:exp_cot_by_error}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Прогон & error\_type & n & IDR (p) & Combined IDR \\
+\midrule
+DS, baseline & \texttt{wrong\_conclusion\_clean} & 30 & 0.033 & 0.033 \\
+DS, baseline & \texttt{wrong\_conclusion} & 20 & 0.750 & 0.778 \\
+DS, baseline & \texttt{wrong\_pvalue} & 23 & 0.720 & 0.720 \\
+DS, baseline & \texttt{rounding} & 20 & 0.800 & 0.800 \\
+DS, baseline & \texttt{transcription} & 15 & 0.562 & 0.562 \\
+DS, + CoT v2 & \texttt{wrong\_conclusion\_clean} & 30 & 0.067 & 0.069 \\
+DS, + CoT v2 & \texttt{wrong\_conclusion} & 20 & 0.750 & 0.893 \\
+DS, + CoT v2 & \texttt{wrong\_pvalue} & 23 & 0.720 & 0.792 \\
+DS, + CoT v2 & \texttt{rounding} & 20 & 0.800 & 0.800 \\
+DS, + CoT v2 & \texttt{transcription} & 15 & 0.562 & 0.562 \\
+Gem, baseline & \texttt{wrong\_conclusion\_clean} & 30 & 0.033 & 0.033 \\
+Gem, baseline & \texttt{wrong\_conclusion} & 20 & 0.750 & 0.857 \\
+Gem, baseline & \texttt{wrong\_pvalue} & 23 & 0.720 & 0.720 \\
+Gem, baseline & \texttt{rounding} & 20 & 0.800 & 0.800 \\
+Gem, baseline & \texttt{transcription} & 15 & 0.562 & 0.562 \\
+Gem, + CoT v2 & \texttt{wrong\_conclusion\_clean} & 30 & 0.033 & 0.034 \\
+Gem, + CoT v2 & \texttt{wrong\_conclusion} & 20 & 0.750 & 0.929 \\
+Gem, + CoT v2 & \texttt{wrong\_pvalue} & 23 & 0.720 & 0.800 \\
+Gem, + CoT v2 & \texttt{rounding} & 20 & 0.800 & 0.840 \\
+Gem, + CoT v2 & \texttt{transcription} & 15 & 0.562 & 0.562 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

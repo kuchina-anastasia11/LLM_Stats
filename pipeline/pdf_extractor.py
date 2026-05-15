@@ -2,8 +2,9 @@ import re
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
-import fitz  
+import fitz
 import pdfplumber
+
 
 @dataclass
 class ExtractedDocument:
@@ -11,24 +12,27 @@ class ExtractedDocument:
     n_pages: int
     n_tables: int
 
-_NUMBER_IN_CELL = re.compile(r"-?\d+\.?\d*")
-_STAT_KEYWORDS = re.compile(
+
+# регулярки для определения "табличных" строк
+NUMBER_IN_CELL = re.compile(r"-?\d+\.?\d*")
+STAT_KEYWORDS = re.compile(
     r"\b(p[-\s]?value|mean|[sS][dD]|[sS][eE]|CI|df|[nN]\b|"
     r"t[-\s]?test|F[-\s]?test|chi|odds|hazard|"
-    r"coefficient|estimate|\u03b2|OR|HR|RR|AOR|"
+    r"coefficient|estimate|β|OR|HR|RR|AOR|"
     r"median|range|IQR)\b",
     re.I,
 )
 
 
-def is_data_table(table: list) -> bool:
+def is_data_table(table):
+    # проверяем что это действительно таблица с цифрами а не верстка
     if not table or len(table) < 2:
         return False
     if max(len(r) for r in table) < 2:
         return False
 
     header_text = " ".join((c or "") for c in table[0])
-    if _STAT_KEYWORDS.search(header_text):
+    if STAT_KEYWORDS.search(header_text):
         return True
 
     total_cells = 0
@@ -39,7 +43,7 @@ def is_data_table(table: list) -> bool:
             if not cell_text:
                 continue
             total_cells += 1
-            if _NUMBER_IN_CELL.search(cell_text):
+            if NUMBER_IN_CELL.search(cell_text):
                 numeric_cells += 1
 
     if total_cells == 0:
@@ -47,13 +51,18 @@ def is_data_table(table: list) -> bool:
     return numeric_cells / total_cells >= 0.3
 
 
-def table_to_markdown(table: list) -> str:
+def table_to_markdown(table):
+    # конвертим таблицу в маркдаун
     if not is_data_table(table):
         return ""
 
     cleaned = []
     for row in table:
-        cleaned.append([(cell or "").replace("\n", " ").strip() for cell in row])
+        new_row = []
+        for cell in row:
+            txt = (cell or "").replace("\n", " ").strip()
+            new_row.append(txt)
+        cleaned.append(new_row)
 
     n_cols = max(len(r) for r in cleaned)
     for row in cleaned:
@@ -69,15 +78,18 @@ def table_to_markdown(table: list) -> str:
 
 
 def extract_tables_pdfplumber(pdf_path):
+    # достаём таблицы и их bbox через pdfplumber
     tables_by_page = {}
     bboxes_by_page = {}
     try:
         with pdfplumber.open(pdf_path) as pdf:
             for i, page in enumerate(pdf.pages, start=1):
+                # сначала по линиям
                 found = page.find_tables(table_settings={
                     "vertical_strategy": "lines",
                     "horizontal_strategy": "lines",
                 })
+                # если не нашли - по тексту
                 if not found:
                     found = page.find_tables(table_settings={
                         "vertical_strategy": "text",
@@ -100,8 +112,11 @@ def extract_tables_pdfplumber(pdf_path):
 
     return tables_by_page, bboxes_by_page
 
+
 def raw_pages(pdf_path, bboxes_by_page=None):
-    bboxes_by_page = bboxes_by_page or {}
+    # достаём текст по страницам, исключая блоки внутри таблиц
+    if bboxes_by_page is None:
+        bboxes_by_page = {}
     doc = fitz.open(pdf_path)
     pages = []
     for page_idx, page in enumerate(doc, start=1):
@@ -119,10 +134,12 @@ def raw_pages(pdf_path, bboxes_by_page=None):
                 by = (block["bbox"][1] + block["bbox"][3]) / 2
                 bx = (block["bbox"][0] + block["bbox"][2]) / 2
 
-                in_table = any(
-                    x0 - 5 <= bx <= x1 + 5 and y0 - 5 <= by <= y1 + 5
-                    for (x0, y0, x1, y1) in table_bboxes
-                )
+                # проверяем попадает ли блок в bbox таблицы
+                in_table = False
+                for (x0, y0, x1, y1) in table_bboxes:
+                    if x0 - 5 <= bx <= x1 + 5 and y0 - 5 <= by <= y1 + 5:
+                        in_table = True
+                        break
                 if in_table:
                     continue
 
@@ -137,6 +154,7 @@ def raw_pages(pdf_path, bboxes_by_page=None):
 
 
 def detect_boilerplate(pages):
+    # ищем повторяющиеся строки (колонтитулы, подписи)
     if not pages:
         return set()
     n = len(pages)
@@ -149,12 +167,17 @@ def detect_boilerplate(pages):
 
 
 def is_page_number(line):
+    # эта строка - номер страницы?
     s = line.strip().strip(".")
-    return bool(re.fullmatch(r"\d{1,4}", s)) or \
-           bool(re.fullmatch(r"page\s+\d+(\s+of\s+\d+)?", s, re.I))
+    if re.fullmatch(r"\d{1,4}", s):
+        return True
+    if re.fullmatch(r"page\s+\d+(\s+of\s+\d+)?", s, re.I):
+        return True
+    return False
 
 
 def build_text(pages, boilerplate, tables_by_page):
+    # склеиваем текст и вставляем таблицы
     parts = []
     buf = []
     tables_inserted = set()
@@ -191,13 +214,15 @@ def build_text(pages, boilerplate, tables_by_page):
 
     flush()
     insert_tables(prev_page)
+    # на всякий случай вставим оставшиеся таблицы
     for pg in sorted(tables_by_page.keys()):
         insert_tables(pg)
 
     return "\n\n".join(parts)
 
+
 def extract(pdf_path):
-    """PDF -> ExtractedDocument (текст + markdown-таблицы, без дубликатов)."""
+    # PDF -> ExtractedDocument
     pdf_path = Path(pdf_path)
     tables_by_page, bboxes_by_page = extract_tables_pdfplumber(pdf_path)
     pages = raw_pages(pdf_path, bboxes_by_page)
@@ -223,4 +248,3 @@ if __name__ == "__main__":
 
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(doc.text)
-
