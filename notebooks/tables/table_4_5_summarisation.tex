@@ -1,0 +1,20 @@
+\begin{table}[h]
+\centering
+\small
+\caption{Эксперимент~4: вклад суммаризации на~этапе~2. Колонки (b)~--- baseline v2, (s)~--- baseline + summarisation v2.}
+\label{tab:exp_summarisation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lrrrrrrrrr@{}}
+\toprule
+Прогон / src & n & Recall (b) & Recall (s) & $F_1$ (b) & $F_1$ (s) & Hall., \% (b) & Hall., \% (s) & ratio & n used \\
+\midrule
+DeepSeek-V3, synthetic & 280 & 0.975 & 0.975 & 0.957 & 0.961 & 6.1 & 5.2 & — & 0 \\
+DeepSeek-V3, real & 2 & 0.358 & 0.113 & 0.528 & 0.188 & 0.0 & 45.5 & 0.550 & 2 \\
+DeepSeek-V3, all & 282 & 0.886 & 0.851 & 0.913 & 0.891 & 5.8 & 6.5 & 0.550 & 2 \\
+Gemini 2.5 Flash, synthetic & 280 & 0.975 & 0.975 & 0.967 & 0.967 & 4.0 & 4.0 & — & 0 \\
+Gemini 2.5 Flash, real & 2 & 0.604 & 0.755 & 0.610 & 0.696 & 38.5 & 35.5 & 0.277 & 2 \\
+Gemini 2.5 Flash, all & 282 & 0.921 & 0.943 & 0.916 & 0.926 & 8.8 & 9.1 & 0.277 & 2 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

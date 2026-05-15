@@ -1,0 +1,19 @@
+\begin{table}[h]
+\centering
+\small
+\caption{Метрики этапа~3 в~разрезе по~\texttt{environment} для~baseline. Колонки <<DS>> и~<<Gem>>~--- DeepSeek-V3 и~Gemini~2.5~Flash.}
+\label{tab:exp_env_breakdown}
+\begin{tabular}{@{}lrrrrrrr@{}}
+\toprule
+env & n & $F_1$\,DS & Rec.\,DS & Hall.\,DS & $F_1$\,Gem & Rec.\,Gem & Hall.\,Gem \\
+\midrule
+apa & 48 & 0.962 & 0.987 & 6.2 & 0.974 & 0.987 & 3.8 \\
+non_apa & 41 & 0.967 & 0.983 & 4.9 & 0.991 & 0.983 & 0.0 \\
+text & 44 & 0.905 & 0.971 & 15.2 & 0.937 & 0.971 & 9.5 \\
+table & 20 & 0.986 & 0.973 & 0.0 & 0.973 & 0.973 & 2.7 \\
+two_apa & 22 & 0.956 & 0.977 & 6.5 & 0.956 & 0.977 & 6.5 \\
+two_text & 14 & 0.945 & 0.929 & 3.7 & 0.949 & 0.933 & 3.4 \\
+no_test & 89 & — & — & — & — & — & — \\
+\bottomrule
+\end{tabular}
+\end{table}

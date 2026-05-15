@@ -1,0 +1,3 @@
+n_examples,n_gold_tests,n_predicted_tests,coverage_s1,precision,recall,f1,field_acc,complete_extr,hallucination,dir_acc,found_interp,IDR,FAR
+251.0,326.0,325.0,1.0,0.84,0.837,0.839,0.938,0.722,0.16,0.571,1.0,0.77,0.047
+252.0,339.0,435.0,0.0,0.736,0.944,0.827,0.928,0.706,0.264,0.564,0.95,0.745,0.09

@@ -1,0 +1,22 @@
+\begin{table}[h]
+\centering
+\small
+\caption{Распределение FP по~категориям \texttt{classify\_fp}.}
+\label{tab:exp_fp_categories}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Прогон & FP всего & duplicate & wrong\_type & off\_value & fabrication \\
+\midrule
+DS, baseline v2 & 20 & 0 (0.0\%) & 0 (0.0\%) & 1 (5.0\%) & 19 (95.0\%) \\
+Gem, baseline v2 & 33 & 0 (0.0\%) & 0 (0.0\%) & 21 (63.6\%) & 12 (36.4\%) \\
+DS, + CoT v2 & 22 & 0 (0.0\%) & 0 (0.0\%) & 1 (4.5\%) & 21 (95.5\%) \\
+Gem, + CoT v2 & 33 & 0 (0.0\%) & 0 (0.0\%) & 21 (63.6\%) & 12 (36.4\%) \\
+DS, + few-shot v2 & 23 & 0 (0.0\%) & 0 (0.0\%) & 1 (4.3\%) & 22 (95.7\%) \\
+Gem, + few-shot v2 & 36 & 0 (0.0\%) & 0 (0.0\%) & 23 (63.9\%) & 13 (36.1\%) \\
+DS, + table-sweep & 44 & 0 (0.0\%) & 3 (6.8\%) & 17 (38.6\%) & 24 (54.5\%) \\
+Gem, + table-sweep & 35 & 0 (0.0\%) & 0 (0.0\%) & 23 (65.7\%) & 12 (34.3\%) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
